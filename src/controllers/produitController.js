@@ -14,7 +14,7 @@ const getProduits = async (req, res) => {
 
     const produitsAvecImage = produits.map(p => ({
       ...p,
-      img_url: `${host}/images/${p.img_produit.replace('produit_img/', '')}`,
+      img_url: `https://cycyfood-backend.onrender.com/images/${p.img_produit.replace('produit_img/', '')}`,
     }));
 
     return res.json({ status: 'success', produits: produitsAvecImage });
