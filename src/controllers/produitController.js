@@ -10,11 +10,11 @@ const getProduits = async (req, res) => {
     );
 
     const host = req.hostname;
-    const port = process.env.PORT || 3000;
+    /*const port = process.env.PORT || 3000;*/
 
     const produitsAvecImage = produits.map(p => ({
       ...p,
-      img_url: `http://${host}:${port}/images/${p.img_produit.replace('produit_img/', '')}`,
+      img_url: `https://cycyfood-backend.onrender.com/images/${p.img_produit.replace('produit_img/', '')}`,
     }));
 
     return res.json({ status: 'success', produits: produitsAvecImage });
