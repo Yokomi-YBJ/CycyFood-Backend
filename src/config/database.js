@@ -13,7 +13,7 @@ const pool = mysql.createPool({
 });
 
 pool.getConnection()
-  .then(conn => { console.log('Connecte a MariaDB (XAMPP)'); conn.release(); })
+  .then(conn => { console.log('Connecte au Serveur de Données'); conn.release(); })
   .catch(err => { console.error('Erreur de connexion a la base de donnees:', err.message); });
 
 module.exports = pool;

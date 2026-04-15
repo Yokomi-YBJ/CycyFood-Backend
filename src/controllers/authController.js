@@ -33,7 +33,7 @@ const inscription = async (req, res) => {
   if (isNaN(tel) || String(telephone).length !== 9) {
     return res.status(400).json({
       status: 'error',
-      message: 'Numéro de téléphone invalide (9 chiffres requis).',
+      message: 'Le numéro doit contenir exactement 9 chiffres.',
     });
   }
 
@@ -47,7 +47,7 @@ const inscription = async (req, res) => {
     if (existing[0].count > 0) {
       return res.status(409).json({
         status: 'error',
-        message: 'Ce numéro de téléphone est déjà utilisé.',
+        message: 'Ce numéro est déjà associé à un compte.',
       });
     }
 
@@ -83,7 +83,7 @@ const inscription = async (req, res) => {
     console.error('Erreur inscription:', err);
     return res.status(500).json({
       status: 'error',
-      message: 'Erreur serveur. Réessayez plus tard.',
+      message: 'Impossible de créer votre compte. Réessayez dans quelques instants.',
     });
   }
 };
@@ -179,13 +179,13 @@ const connexion = async (req, res) => {
     // Ni user ni admin trouvé
     return res.status(404).json({
       status: 'error',
-      message: 'Aucun compte trouvé. Veuillez vous inscrire.',
+      message: 'Numéro de téléphone ou mot de passe incorrect.',
     });
   } catch (err) {
     console.error('Erreur connexion:', err);
     return res.status(500).json({
       status: 'error',
-      message: 'Erreur serveur. Réessayez plus tard.',
+      message: 'Impossible de traiter votre connexion. Réessayez dans quelques instants.',
     });
   }
 };

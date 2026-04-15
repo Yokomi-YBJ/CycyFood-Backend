@@ -6,7 +6,7 @@ const getProduits = async (req, res) => {
   try {
     // Si la colonne disponible existe, on filtre, sinon on retourne tout
     const [produits] = await db.query(
-      'SELECT * FROM produit WHERE disponible = 1 OR disponible IS NULL ORDER BY id_produit DESC'
+      'SELECT * FROM produit WHERE disponible = 1 OR disponible IS NULL ORDER BY id_produit DESC LIMIT 20'
     );
 
     const host = req.hostname;
@@ -20,7 +20,7 @@ const getProduits = async (req, res) => {
     return res.json({ status: 'success', produits: produitsAvecImage });
   } catch (err) {
     console.error('Erreur getProduits:', err);
-    return res.status(500).json({ status: 'error', message: 'Erreur serveur.' });
+    return res.status(500).json({ status: 'error', message: 'Impossible de charger les produits. Réessayez.' });
   }
 };
 

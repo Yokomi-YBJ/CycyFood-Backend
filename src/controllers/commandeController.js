@@ -7,10 +7,10 @@ const passerCommande = async (req, res) => {
   const id_user = req.user.id_user;
 
   if (!produits || !Array.isArray(produits) || produits.length === 0) {
-    return res.status(400).json({ status: 'error', message: 'Panier vide ou données invalides.' });
+    return res.status(400).json({ status: 'error', message: 'Votre panier est vide.' });
   }
   if (!prixTotal || isNaN(parseFloat(prixTotal))) {
-    return res.status(400).json({ status: 'error', message: 'Prix total invalide.' });
+    return res.status(400).json({ status: 'error', message: 'Le montant de la commande n\'est pas valide.' });
   }
 
   const conn = await db.getConnection();
@@ -42,7 +42,7 @@ const passerCommande = async (req, res) => {
   } catch (err) {
     await conn.rollback();
     console.error('Erreur passerCommande:', err);
-    return res.status(500).json({ status: 'error', message: 'Erreur lors de l\'enregistrement.' });
+    return res.status(500).json({ status: 'error', message: 'Impossible d\'enregistrer votre commande. Vérifiez vos informations.' });
   } finally {
     conn.release();
   }
@@ -67,7 +67,7 @@ const getMesCommandes = async (req, res) => {
     return res.json({ status: 'success', commandes });
   } catch (err) {
     console.error('Erreur getMesCommandes:', err);
-    return res.status(500).json({ status: 'error', message: 'Erreur serveur.' });
+    return res.status(500).json({ status: 'error', message: 'Impossible de charger vos commandes. Réessayez.' });
   }
 };
 

@@ -7,7 +7,7 @@ const fs = require('fs');
 const getProduits = async (req, res) => {
   try {
     const [produits] = await db.query(
-      'SELECT * FROM produit ORDER BY id_produit DESC'
+      'SELECT * FROM produit ORDER BY id_produit DESC LIMIT 20'
     );
     const host = req.hostname;
     const port = process.env.PORT || 3000;
@@ -18,7 +18,7 @@ const getProduits = async (req, res) => {
     return res.json({ status: 'success', produits: produitsAvecUrl });
   } catch (err) {
     console.error('Erreur getProduits admin:', err);
-    return res.status(500).json({ status: 'error', message: 'Erreur serveur.' });
+    return res.status(500).json({ status: 'error', message: 'Impossible de charger les produits. Réessayez.' });
   }
 };
 
@@ -36,7 +36,7 @@ const ajouterProduit = async (req, res) => {
   if (!req.file) {
     return res.status(400).json({
       status: 'error',
-      message: 'Une image est obligatoire.',
+      message: 'Veuillez télécharger une image pour le produit.',
     });
   }
 
@@ -80,7 +80,7 @@ const ajouterProduit = async (req, res) => {
       if (fs.existsSync(imgPath)) fs.unlinkSync(imgPath);
     }
     console.error('Erreur ajouterProduit:', err);
-    return res.status(500).json({ status: 'error', message: 'Erreur serveur.' });
+    return res.status(500).json({ status: 'error', message: 'Impossible d\'ajouter le produit. Réessayez.' });
   }
 };
 
@@ -92,7 +92,7 @@ const modifierProduit = async (req, res) => {
   if (!nom_produit || !description || !Prix) {
     return res.status(400).json({
       status: 'error',
-      message: 'Nom, description et prix sont obligatoires.',
+      message: 'Le nom, description et prix sont obligatoires.',
     });
   }
 
@@ -100,7 +100,7 @@ const modifierProduit = async (req, res) => {
     // Récupérer l'ancienne image
     const [existing] = await db.query('SELECT img_produit FROM produit WHERE id_produit = ?', [id]);
     if (existing.length === 0) {
-      return res.status(404).json({ status: 'error', message: 'Produit introuvable.' });
+      return res.status(404).json({ status: 'error', message: 'Ce produit n\'existe pas.' });
     }
 
     let img_produit = existing[0].img_produit;
@@ -140,7 +140,7 @@ const modifierProduit = async (req, res) => {
     });
   } catch (err) {
     console.error('Erreur modifierProduit:', err);
-    return res.status(500).json({ status: 'error', message: 'Erreur serveur.' });
+    return res.status(500).json({ status: 'error', message: 'Impossible de modifier le produit. Réessayez.' });
   }
 };
 
@@ -151,7 +151,7 @@ const supprimerProduit = async (req, res) => {
   try {
     const [existing] = await db.query('SELECT img_produit FROM produit WHERE id_produit = ?', [id]);
     if (existing.length === 0) {
-      return res.status(404).json({ status: 'error', message: 'Produit introuvable.' });
+      return res.status(404).json({ status: 'error', message: 'Ce produit n\'existe pas.' });
     }
 
     await db.query('DELETE FROM produit WHERE id_produit = ?', [id]);
@@ -164,7 +164,7 @@ const supprimerProduit = async (req, res) => {
     return res.json({ status: 'success', message: 'Produit supprimé.' });
   } catch (err) {
     console.error('Erreur supprimerProduit:', err);
-    return res.status(500).json({ status: 'error', message: 'Erreur serveur.' });
+    return res.status(500).json({ status: 'error', message: 'Impossible de supprimer le produit. Réessayez.' });
   }
 };
 
@@ -184,7 +184,7 @@ const toggleDisponibilite = async (req, res) => {
     });
   } catch (err) {
     console.error('Erreur toggleDisponibilite:', err);
-    return res.status(500).json({ status: 'error', message: 'Erreur serveur.' });
+    return res.status(500).json({ status: 'error', message: 'Impossible de modifier la disponibilité. Réessayez.' });
   }
 };
 

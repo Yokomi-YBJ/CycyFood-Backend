@@ -7,7 +7,7 @@ const savePushToken = async (req, res) => {
   const id_user = req.user.id_user;
 
   if (!push_token) {
-    return res.status(400).json({ status: 'error', message: 'Token manquant.' });
+    return res.status(400).json({ status: 'error', message: 'Une erreur est survenue. Veuillez réessayer.' });
   }
 
   try {
@@ -18,7 +18,7 @@ const savePushToken = async (req, res) => {
     return res.json({ status: 'success', message: 'Token enregistré.' });
   } catch (err) {
     console.error('Erreur savePushToken:', err);
-    return res.status(500).json({ status: 'error', message: 'Erreur serveur.' });
+    return res.status(500).json({ status: 'error', message: 'Impossible d\'enregistrer votre appareil. Réessayez.' });
   }
 };
 
@@ -53,7 +53,7 @@ const envoyerNotification = async (pushToken, titre, corps, data = {}) => {
     if (result.data?.status === 'error') {
       console.error('Expo Push erreur:', result.data.message);
     } else {
-      console.log('Notification envoyée à:', pushToken.slice(0, 30) + '...');
+      console.log('Notification envoyée ');
     }
   } catch (err) {
     // Ne jamais faire échouer la requête principale si la notif échoue
@@ -64,19 +64,19 @@ const envoyerNotification = async (pushToken, titre, corps, data = {}) => {
 // ===================== MESSAGES PAR STATUT =====================
 const MESSAGES_STATUT = {
   confirmee: {
-    titre: '✅ Commande confirmée !',
+    titre: 'Commande confirmée !',
     corps: 'Votre commande est en cours de préparation. Merci pour votre confiance !',
   },
   en_livraison: {
-    titre: '🛵 En route vers vous !',
+    titre: 'En route vers vous !',
     corps: 'Votre commande est en livraison. Préparez-vous !',
   },
   livree: {
-    titre: '📦 Commande livrée !',
+    titre: 'Commande livrée !',
     corps: 'Votre commande a bien été livrée. Bon appétit ! 🍽️',
   },
   annulee: {
-    titre: '❌ Commande annulée',
+    titre: 'Commande annulée',
     corps: 'Votre commande a été annulée. Contactez-nous sur WhatsApp pour plus d\'info.',
   },
 };

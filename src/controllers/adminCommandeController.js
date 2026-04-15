@@ -31,12 +31,12 @@ const getToutesCommandes = async (req, res) => {
     }
 
     query += ' GROUP BY c.id_commande ORDER BY c.date_commande DESC, c.heure_commande DESC';
-
+    query += ' LIMIT 50';
     const [commandes] = await db.query(query, params);
     return res.json({ status: 'success', commandes });
   } catch (err) {
     console.error('Erreur getToutesCommandes:', err);
-    return res.status(500).json({ status: 'error', message: 'Erreur serveur.' });
+    return res.status(500).json({ status: 'error', message: 'Impossible de charger les commandes. Réessayez.' });
   }
 };
 
@@ -44,10 +44,9 @@ const getToutesCommandes = async (req, res) => {
 const changerStatut = async (req, res) => {
   const { id } = req.params;
   const { statut, note_admin } = req.body;
-
   const statutsValides = ['en_attente', 'confirmee', 'en_livraison', 'livree', 'annulee'];
   if (!statutsValides.includes(statut)) {
-    return res.status(400).json({ status: 'error', message: 'Statut invalide.' });
+    return res.status(400).json({ status: 'error', message: 'Le statut de la commande n\'est pas valide.' });
   }
 
   try {
@@ -68,7 +67,7 @@ const changerStatut = async (req, res) => {
     );
 
     if (rows.length === 0) {
-      return res.status(404).json({ status: 'error', message: 'Commande introuvable.' });
+      return res.status(404).json({ status: 'error', message: 'Cette commande n\'existe pas.' });
     }
 
     const client = rows[0];
@@ -153,8 +152,12 @@ const getClients = async (req, res) => {
     return res.json({ status: 'success', clients });
   } catch (err) {
     console.error('Erreur getClients:', err);
-    return res.status(500).json({ status: 'error', message: 'Erreur serveur.' });
+    return res.status(500).json({ status: 'error', message: 'Impossible de charger la liste des clients. Réessayez.' });
   }
 };
+
+//================================ DEBUG EXPO NOTIFICATIONS ================================
+
+
 
 module.exports = { getToutesCommandes, changerStatut, getStats, getClients };

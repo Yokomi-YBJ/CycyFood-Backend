@@ -5,7 +5,7 @@ const path = require('path');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
 
 app.use(cors({ origin: '*', methods: ['GET','POST','PUT','PATCH','DELETE'], allowedHeaders: ['Content-Type','Authorization'] }));
 app.use(express.json());
@@ -25,7 +25,7 @@ app.get('/', (req, res) => {
   res.json({ status: 'success', message: 'API Cycy Food v1.1' });
 });
 
-app.use((req, res) => res.status(404).json({ status: 'error', message: 'Route introuvable.' }));
+app.use((req, res) => res.status(404).json({ status: 'error', message: 'Demande invalide.' }));
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log('\nCYCY FOOD API v1.1 - Démarré !');

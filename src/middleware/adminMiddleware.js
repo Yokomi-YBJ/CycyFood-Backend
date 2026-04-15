@@ -7,7 +7,7 @@ const adminMiddleware = (req, res, next) => {
     if (req.user.role !== 'admin') {
       return res.status(403).json({
         status: 'error',
-        message: 'Accès refusé. Réservé aux administrateurs.',
+        message: 'Vous n\'avez pas accès à cette fonction.',
       });
     }
     next();
