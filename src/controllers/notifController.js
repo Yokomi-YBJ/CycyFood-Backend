@@ -49,6 +49,7 @@ const envoyerNotification = async (pushToken, titre, corps, data = {}) => {
     });
 
     const result = await response.json();
+    console.log('[NOTIF] Réponse Expo:', JSON.stringify(result));
 
     if (result.data?.status === 'error') {
       console.error('Expo Push erreur:', result.data.message);
