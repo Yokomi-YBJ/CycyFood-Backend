@@ -43,6 +43,7 @@ const envoyerNotification = async (pushToken, titre, corps, data = {}) => {
         body: corps,
         sound: 'default',
         priority: 'high',
+        channelId: 'default',
         data: { type: 'commande', ...data },
         badge: 1,
       }),
