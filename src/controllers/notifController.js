@@ -83,4 +83,31 @@ const MESSAGES_STATUT = {
   },
 };
 
-module.exports = { savePushToken, envoyerNotification, MESSAGES_STATUT };
+// ===================== NOTIFIER LES ADMINS =====================
+const notifierAdmins = async (commande_id, nomClient, prixTotal, aLivraison) => {
+  try {
+    const [admins] = await db.query(
+      'SELECT push_token FROM user WHERE role = ? AND push_token IS NOT NULL',
+      ['admin']
+    );
+
+    if (admins.length === 0) {
+      console.log('[NOTIF] Aucun admin avec push_token');
+      return;
+    }
+
+    const livraisonText = aLivraison ? ' (avec livraison)' : '';
+    const titre = 'Nouvelle commande !';
+    const corps = `${nomClient} a passé une commande de ${prixTotal}FCFA ${livraisonText}`;
+
+    for (const admin of admins) {
+      if (admin.push_token) {
+        await envoyerNotification(admin.push_token, titre, corps, { commande_id });
+      }
+    }
+  } catch (err) {
+    console.error('[NOTIF] Erreur notifierAdmins:', err.message);
+  }
+};
+
+module.exports = { savePushToken, envoyerNotification, MESSAGES_STATUT, notifierAdmins };
