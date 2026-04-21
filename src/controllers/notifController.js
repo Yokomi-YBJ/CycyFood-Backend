@@ -87,12 +87,11 @@ const MESSAGES_STATUT = {
 const notifierAdmins = async (commande_id, nomClient, prixTotal, aLivraison) => {
   try {
     const [admins] = await db.query(
-      'SELECT push_token FROM user WHERE role = ? AND push_token IS NOT NULL',
-      ['admin']
+      'SELECT push_token FROM admin WHERE push_token IS NOT NULL' 
     );
 
     if (admins.length === 0) {
-      console.log('[NOTIF] Aucun admin avec push_token');
+      console.log('[NOTIF] Aucun admin');
       return;
     }
 
